@@ -99,7 +99,7 @@ RunService.Heartbeat:Connect(function()
     local humanoid = getHumanoid()
     
     if not char or not root or not humanoid then return end
-    
+        )
     -- Calculate movement
     local moveDir = calculateMoveDirection()
     local isInAir = humanoid:GetState() == Enum.HumanoidStateType.Jumping or 
