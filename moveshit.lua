@@ -1,4 +1,4 @@
-        -- Movement settings
+-- Movement settings
 local STRAFE_SPEED = 30
 local AIR_MULTIPLIER = 1.5
 local BHOP_POWER = 40
@@ -10,7 +10,6 @@ local RunService = game:GetService("RunService")
 
 -- Local player setup
 local player = Players.LocalPlayer
-local mouse = player:GetMouse()
 
 -- Variables
 local moveKeys = {
@@ -28,12 +27,12 @@ end
 
 local function getRoot()
     local char = getChar()
-    return char:FindFirstChild("HumanoidRootPart")
+    return char and char:FindFirstChild("HumanoidRootPart")
 end
 
 local function getHumanoid()
     local char = getChar()
-    return char:FindFirstChild("Humanoid")
+    return char and char:FindFirstChild("Humanoid")
 end
 
 -- Movement function
@@ -57,7 +56,9 @@ local function calculateMoveDirection()
         dir = dir + cf.RightVector
     end
     
-    dir = Vector3.new(dir.X, 0, dir.Z).Unit
+    if dir.Magnitude > 0 then
+        dir = Vector3.new(dir.X, 0, dir.Z).Unit
+    end
     return dir
 end
 
@@ -99,7 +100,7 @@ RunService.Heartbeat:Connect(function()
     local humanoid = getHumanoid()
     
     if not char or not root or not humanoid then return end
-        )
+    
     -- Calculate movement
     local moveDir = calculateMoveDirection()
     local isInAir = humanoid:GetState() == Enum.HumanoidStateType.Jumping or 
@@ -119,14 +120,14 @@ RunService.Heartbeat:Connect(function()
             root.Velocity.Y,  -- Preserve vertical velocity
             newVel.Z
         )
-        
-        -- Bunny hop
-        if moveKeys.Space and root.Velocity.Y < 1 then
-            root.Velocity = Vector3.new(
-                root.Velocity.X,
-                BHOP_POWER,
-                root.Velocity.Z
-            )
-        end
-  
+    end
 
+    -- Bunny hop
+    if moveKeys.Space and humanoid:GetState() == Enum.HumanoidStateType.Running then
+        root.Velocity = Vector3.new(
+            root.Velocity.X,
+            BHOP_POWER,
+            root.Velocity.Z
+        )
+    end
+end)
