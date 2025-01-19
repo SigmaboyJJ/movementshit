@@ -1,8 +1,7 @@
 -- Movement settings
 local STRAFE_SPEED = 30
 local AIR_MULTIPLIER = 1.5
-local BHOP_POWER = 40
-
+local BHOP_POWER = 1
 -- Services
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
